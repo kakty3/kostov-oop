@@ -1,4 +1,8 @@
+#ifndef XLIST_H
+#define XLIST_H
 
+#include <stddef.h> // clang doesn't know what is NULL
+#include <iostream>
 
 template <typename T>
 class XList {
@@ -24,9 +28,9 @@ public:
 	~XList(){ this->Clean(); };
 	void push_back(T value);
 	void push_front(T value);
-	T GetFirstValue() const { return _head->GetValue(); }
-	T GetLastValue() const { return _tail->GetValue(); }
-	int size() const { return _size; }
+	T GetFirstValue() const;
+	T GetLastValue() const; 
+	int GetSize() const { return _size; }
 	bool IsEmpty() const { return (_size > 0) ? false : true ; }
 	void Clean();
 	void RemoveFirst();
@@ -57,3 +61,5 @@ private:
 	XListValue<T> * _head;
 	XListValue<T> * _tail;
 };
+
+#endif /* XLIST_H */

@@ -1,2 +1,2 @@
 all:
-	g++ xlist.cpp -Wall -pedantic -o xlist
+	g++ main.cpp xlist.cpp -Wall -pedantic -o xlist
