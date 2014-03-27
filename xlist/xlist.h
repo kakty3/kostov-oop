@@ -62,4 +62,72 @@ private:
 	XListValue<T> * _tail;
 };
 
+template<typename T>
+T XList<T>::GetFirstValue() const {
+	if (_head == NULL) throw "List is empty";
+	return _head->GetValue();
+}
+
+template<typename T>
+T XList<T>::GetLastValue() const {
+	if (_tail == NULL) throw "List is empty";
+	return _tail->GetValue();
+}
+
+template<typename T>
+void XList<T>::push_back(T value){
+	XListValue<T> * newValue = new XListValue<T>(value);
+	if (_tail) {
+		_tail->SetNext(newValue);
+		newValue->SetPrev(_tail);
+	}
+	_tail = newValue;
+	if (!_head) _head = newValue;
+	++_size;
+}
+
+template<typename T>
+void XList<T>::push_front(T value){
+	XListValue<T> * newValue = new XListValue<T>(value);
+	if (_head){
+		_head->SetPrev(newValue);
+		newValue->SetNext(_head);
+	}
+	_head = newValue;
+	if (!_tail) _tail = newValue;
+	++_size;
+}
+
+template <typename T>
+void XList<T>::RemoveFirst(){
+	if (_head == NULL) return;
+	XListValue<T> * old_head = _head;
+	_head = _head->GetNext();
+	if (_head != NULL) _head->SetPrev(NULL);
+	delete old_head;
+	--_size;
+}
+
+template <typename T>
+void XList<T>::RemoveLast(){
+	if (_tail == NULL) return;
+	XListValue<T> * old_tail = _tail;
+	_tail = _tail->GetPrev();
+	if (_tail != NULL )_tail->SetNext(NULL);
+	delete old_tail;
+	--_size;
+}
+
+template<typename T>
+void XList<T>::Clean(){
+	while (_size) this->RemoveFirst();
+}
+
+template<typename T>
+void XList<T>::Print(){
+	for (XList<T>::iterator it = _head; it != NULL; ++it) {
+		std::cout << it->GetValue() << ' ';
+	}
+}
+
 #endif /* XLIST_H */
