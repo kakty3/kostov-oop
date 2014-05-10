@@ -2,11 +2,11 @@
 
 int main(){
 	XList<int> xlist;
-	std::cout << "\nIs empty: " << xlist.IsEmpty();
+	std::cout << "Is empty: " << xlist.IsEmpty() << std::endl;
 	try {
 		std::cout << xlist.GetFirstValue();
 	} catch (const char* error){
-		std::cout << "\nEXCEPTION RAISED: "  << error << '\n';
+		std::cout << "EXCEPTION RAISED: "  << error << std::endl;
 	}
 
 	xlist.push_back(4);
@@ -15,25 +15,28 @@ int main(){
 	xlist.push_front(2);
 	xlist.push_front(1);
 
-	std::cout << "\nFrom beginning to ending: ";
+	std::cout << "From beginning to ending: ";
 	for (XList<int>::iterator it = xlist.begin(); it != NULL; ++it) {
 		std::cout << it->GetValue() << ' ';
 	}
-	std::cout << "\nFrom ending to beginning: ";
+	std::cout << std::endl;
+	std::cout << "From ending to beginning: ";
 	for (XList<int>::iterator it = xlist.end(); it != NULL; --it) {
 		std::cout << it->GetValue() << ' ';
 	}
-	std::cout << "\nSize is: " << xlist.GetSize();
-	std::cout << "\nIs empty: " << xlist.IsEmpty();
-	std::cout << "\nFirst element is: " << xlist.GetFirstValue();
-	std::cout << "\nLast element is: " << xlist.GetLastValue();
-	std::cout << "\nRemoving last element...\n";
+	std::cout << std::endl;
+	std::cout << "Size is: " << xlist.GetSize() << std::endl;
+	std::cout << "Is empty: " << xlist.IsEmpty() << std::endl;
+	std::cout << "First element is: " << xlist.GetFirstValue() << std::endl;
+	std::cout << "Last element is: " << xlist.GetLastValue() << std::endl;
+	std::cout << "Removing last element..." << std::endl;;
 	xlist.RemoveLast();
 	xlist.Print();
-	std::cout << "\nRemoving first element...\n";
+	std::cout << "\nRemoving first element..." << std::endl;;
 	xlist.RemoveFirst();
 	xlist.Print();
-	std::cout << "\nCleaning list...\n";
+	std::cout << std::endl;
+	std::cout << "Cleaning list..." << std::endl;;
 	xlist.Clean();
 	xlist.Print();
 
