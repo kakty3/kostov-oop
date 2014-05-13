@@ -20,25 +20,29 @@ protected:
 };
 
 
-class Printable : virtual public Named {
+class Printable : public Named {
 public:
+    Printable(std::string name) : Named(name) {}
     virtual void print() = 0;
 };
 
-class Shape : virtual public Named {
+class Shape : public Printable {
 public:
-    Shape(std::string name) : Named (name) {
+    Shape(std::string name) : Printable (name) {
         n_of_shapes++;
     };
+    virtual ~Shape() {
+        n_of_shapes--;
+    }
     static int GetCount() { return n_of_shapes; }
     static int n_of_shapes;
-    // static void ResetNumberOfShapes() { n_of_shapes = 0; }
 private:
 };
 
-class Point : public Shape, public Printable {
+// class Point : public Shape, public Printable {
+class Point : public Shape {
 public:
-    Point(double x, double y, std::string name) : Shape(name), Named(name), _x(x), _y(y) {}
+    Point(double x, double y, std::string name) : Shape(name), _x(x), _y(y) {}
     virtual void print() { 
         printf("name=%s\n\tx=%f\n\ty=%f\n", _name.c_str(), _x, _y);
     }
@@ -52,12 +56,13 @@ private:
     double _y;
 };
 
-class Circle : public Shape, public Printable {
+// class Circle : public Shape, public Printable {
+class Circle : public Shape {
 public:
-    Circle(double x, double y, double radius, std::string name) : Shape(name), Named(name), _center(Point(x, y, "")) {
+    Circle(const Point& center, double radius, std::string name) : Named(name), Shape(name), _center(center) {
         _radius = radius;
     }
-    float GetSquare() const {  return (M_PI * _radius * _radius) / 2; }
+    float GetSquare() const {  return (M_PI * sqr(_radius)); }
     virtual void print() {
         printf("name=%s\n"
                "\tcenter_x=%f\n"
@@ -73,19 +78,21 @@ private:
 
 class Rect : public Shape, public Printable {
 public:
-    Rect(Point top_left, Point top_right, Point bottom_right, Point bottom_left, std::string name) :
-        Shape(name), Named(name),
+    // we need only two points
+    Rect(const Point& top_left, const Point& top_right, const Point& bottom_right, const Point& bottom_left, std::string name) :
+        Named(name), Shape(name),
         _top_left(top_left), 
         _top_right(top_right),
         _bottom_right(bottom_right),
         _bottom_left(bottom_left) {
-            // this->square = GetSquare();
         }
+
     double GetSquare(){
         double top_line = _top_left.GetDistanceToPoint(_top_right);
         double side_line = _top_left.GetDistanceToPoint(_bottom_left);
         return top_line * side_line;
     };
+
     virtual void print() {
         printf("name=%s\n"
                "\ttop_left_point: x=%f, y=%f\n"
@@ -106,23 +113,22 @@ private:
     Point _top_right;
     Point _bottom_right;
     Point _bottom_left;
-    // double square;
 };
 
 class Square : public Rect {
 public:
-    Square(Point bottom_left, double side_size, std::string name) :
+    Square(const Point& bottom_left, double side_size, std::string name) :
+        Named(name),
         Rect(Point(bottom_left.GetX(), bottom_left.GetY() + side_size, ""),
              Point(bottom_left.GetX() + side_size, bottom_left.GetY() + side_size, ""),
              Point(bottom_left.GetX() + side_size, bottom_left.GetY(), ""),
              bottom_left,
-             name),
-        Named(name) {}    
+             name) {}    
 };
 
 class Polyline : public Shape, public Printable {
 public:
-    Polyline(std::string name) : Shape(name), Named(name){} 
+    Polyline(std::string name) : Named(name), Shape(name){} 
 
     void AddPoint(const Point& point) {
         _points.push_back(point);

@@ -14,23 +14,30 @@ int main(){
     Point point3(4., 0., "point_3");
     Point point4(0., 0., "point_4");
     point1.print();
+    printf("Number of shapes = %d\n", Shape::GetCount());
 
-    Circle circle(0., 0., 10., "circle_1");
+    Circle circle(point4, 10., "circle_1");
     circle.print();
+    printf("Number of shapes = %d\n", Shape::GetCount());
 
     Rect rect(point1, point2, point3, point4, "rectangle");
     rect.print();
+    printf("Number of shapes = %d\n", Shape::GetCount());
 
     Square square(point4, 4, "square");
     square.print();
+    printf("Number of shapes = %d\n", Shape::GetCount());
 
     Polyline polyline("polyline");
+    printf("Number of shapes = %d\n", Shape::GetCount());
     polyline.AddPoint(point1);
+    printf("Number of shapes = %d\n", Shape::GetCount());
     polyline.AddPoint(point2);
     polyline.AddPoint(point3);
     polyline.AddPoint(point4);
     polyline.print();
 
-    printf("Number of shapes = %d", Shape::GetCount());
+    printf("Number of shapes = %d\n", Shape::GetCount());
+
     return 0;
 }
