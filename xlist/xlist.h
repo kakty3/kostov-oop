@@ -7,21 +7,21 @@
 template <typename T>
 class XList {
 private:
-	template<typename _T>
-	class XListElement
-	{
+	// template <typename _T>
+	struct XListElement {
 	public:
-		XListElement(_T value) : _value(value), _next(NULL), _prev(NULL) {}
+		XListElement(T data) : _data(data), _next(NULL), _prev(NULL) {}
 		~XListElement(){};
-		_T GetValue() const { return _value; }
-		XListElement<_T> * GetNext() const { return _next; }
-		void SetNext(XListElement<_T> * ref) { _next = ref; }
-		XListElement<_T> * GetPrev() const { return _prev; }
-		void SetPrev(XListElement<_T> * ref) { _prev = ref; }
+		T GetData() const { return _data; }
+		XListElement * GetNext() const { return _next; }
+		void SetNext(XListElement * ref) { _next = ref; }
+		XListElement * GetPrev() const { return _prev; }
+		void SetPrev(XListElement * ref) { _prev = ref; }
+        operator T() { return _data; }
 	private:
-		_T _value;
-		XListElement<_T> * _next;
-		XListElement<_T> * _prev;
+        T _data;
+		XListElement * _next;
+		XListElement * _prev;
 	};
 public:
 	XList(): _size(0), _head(NULL), _tail(NULL) {};
@@ -38,16 +38,18 @@ public:
 	void Print();
 
 	struct iterator {
-	    XListElement<T> * ptr;
-	    iterator (XListElement<T> * _ptr = 0) : ptr(_ptr) {}
-	    XListElement<T> & operator*() { return *ptr; }
-	    XListElement<T> * operator->() { return ptr; }
-	    bool operator!=(XListElement<T> * other) const { return !(ptr == other); }
-	    bool operator==(XListElement<T> * other) const { return ptr == other; }
+	    XListElement * ptr;
+	    iterator (XListElement * _ptr = 0) : ptr(_ptr) {}
+	    T operator*() const { 
+            return (*ptr).GetData(); 
+        }
+	    XListElement * operator->() const { return ptr; }
+	    bool operator!=(XListElement * other) const { return !(ptr == other); }
+	    bool operator==(XListElement * other) const { return ptr == other; }
 	    XList<T>::iterator operator++(){ 
 	    	ptr = ptr->GetNext();
 	    	return ptr;
-	    }
+      }
 	    XList<T>::iterator operator--(){ 
 	    	ptr = ptr->GetPrev();
 	    	return ptr;
@@ -58,25 +60,25 @@ public:
 
 private:
 	int _size;
-	XListElement<T> * _head;
-	XListElement<T> * _tail;
+	XListElement * _head;
+	XListElement * _tail;
 };
 
 template<typename T>
 T XList<T>::GetFirstValue() const {
 	if (_head == NULL) throw "Can't get first element of empty list";
-	return _head->GetValue();
+	return _head->GetData();
 }
 
 template<typename T>
 T XList<T>::GetLastValue() const {
 	if (_tail == NULL) throw "List is empty";
-	return _tail->GetValue();
+	return _tail->GetData();
 }
 
 template<typename T>
 void XList<T>::push_back(const T& value){
-	XListElement<T> * newValue = new XListElement<T>(value);
+	XListElement * newValue = new XListElement(value);
 	if (_tail) {
 		_tail->SetNext(newValue);
 		newValue->SetPrev(_tail);
@@ -88,7 +90,7 @@ void XList<T>::push_back(const T& value){
 
 template<typename T>
 void XList<T>::push_front(const T& value){
-	XListElement<T> * newValue = new XListElement<T>(value);
+	XListElement * newValue = new XListElement(value);
 	if (_head){
 		_head->SetPrev(newValue);
 		newValue->SetNext(_head);
@@ -101,7 +103,7 @@ void XList<T>::push_front(const T& value){
 template <typename T>
 void XList<T>::RemoveFirst(){
 	if (_head == NULL) return;
-	XListElement<T> * old_head = _head;
+	XListElement * old_head = _head;
 	_head = _head->GetNext();
 	if (_head != NULL) _head->SetPrev(NULL);
 	delete old_head;
@@ -111,7 +113,7 @@ void XList<T>::RemoveFirst(){
 template <typename T>
 void XList<T>::RemoveLast(){
 	if (_tail == NULL) return;
-	XListElement<T> * old_tail = _tail;
+	XListElement * old_tail = _tail;
 	_tail = _tail->GetPrev();
 	if (_tail != NULL )_tail->SetNext(NULL);
 	delete old_tail;
@@ -126,7 +128,7 @@ void XList<T>::Clean(){
 template<typename T>
 void XList<T>::Print(){
 	for (XList<T>::iterator it = _head; it != NULL; ++it) {
-		std::cout << it->GetValue() << ' ';
+		std::cout << it->GetData() << ' ';
 	}
 }
 

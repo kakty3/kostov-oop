@@ -13,8 +13,8 @@ double sqr(const double& x){
 class Named {
 public:
     Named(std::string name) : _name(name){
-         // std::cout << name << " Named constructor called.\n"; 
     };
+    std::string GetName() const { return _name; }
 protected:
     std::string _name;
 };
@@ -39,12 +39,16 @@ public:
 private:
 };
 
-// class Point : public Shape, public Printable {
 class Point : public Shape {
 public:
     Point(double x, double y, std::string name) : Shape(name), _x(x), _y(y) {}
-    virtual void print() { 
+    virtual void print() {
         printf("name=%s\n\tx=%f\n\ty=%f\n", _name.c_str(), _x, _y);
+    }
+    void ToStream(std::ostream & out){
+        out << "name=" << _name << std::endl
+            << "\tx=" << _x << std::endl
+            << "\ty=" << _y << std::endl;
     }
     double GetX () const { return _x; }
     double GetY () const { return _y; }
@@ -56,10 +60,9 @@ private:
     double _y;
 };
 
-// class Circle : public Shape, public Printable {
 class Circle : public Shape {
 public:
-    Circle(const Point& center, double radius, std::string name) : Named(name), Shape(name), _center(center) {
+    Circle(const Point& center, double radius, std::string name) : Shape(name), _center(center) {
         _radius = radius;
     }
     float GetSquare() const {  return (M_PI * sqr(_radius)); }
@@ -71,16 +74,23 @@ public:
                "\tsquare=%f\n", \
             _name.c_str(), _center.GetX(), _center.GetY(), _radius, GetSquare());
     }
+    void ToStream(std::ostream & out){
+        out << "name=" << _name << std::endl <<
+               "\tcenter_x=" << _center.GetX() << std::endl <<
+               "\tcenter_y=" << _center.GetY() << std::endl <<
+               "\tradius=" << _radius << std::endl <<
+               "\tsquare=" << GetSquare() << std::endl;
+    }
 private:
     Point _center;
     double _radius;    
 };
 
-class Rect : public Shape, public Printable {
+class Rect : public Shape {
 public:
     // we need only two points
     Rect(const Point& top_left, const Point& top_right, const Point& bottom_right, const Point& bottom_left, std::string name) :
-        Named(name), Shape(name),
+        Shape(name),
         _top_left(top_left), 
         _top_right(top_right),
         _bottom_right(bottom_right),
@@ -108,6 +118,14 @@ public:
                 this->GetSquare()
         );
     }
+    void ToStream(std::ostream & out){
+        out << "name=" << _name << std::endl <<
+               "\ttop_left_point: x=" << _top_left.GetX() << ", y=" << _top_left.GetY() << std::endl <<
+               "\ttop_right_point: x=" << _top_right.GetX() << ", y=" << _top_right.GetY() << std::endl <<
+               "\tbottom_right_point: x=" << _bottom_right.GetX() << ", y=" << _bottom_right.GetY() << std::endl <<
+               "\tbottom_left_point: x=" << _bottom_left.GetX() << ", y=" <<  _bottom_left.GetY() << std::endl <<
+               "\tsquare=" << this->GetSquare() << std::endl;
+    }
 private:
     Point _top_left;
     Point _top_right;
@@ -118,7 +136,6 @@ private:
 class Square : public Rect {
 public:
     Square(const Point& bottom_left, double side_size, std::string name) :
-        Named(name),
         Rect(Point(bottom_left.GetX(), bottom_left.GetY() + side_size, ""),
              Point(bottom_left.GetX() + side_size, bottom_left.GetY() + side_size, ""),
              Point(bottom_left.GetX() + side_size, bottom_left.GetY(), ""),
@@ -126,9 +143,9 @@ public:
              name) {}    
 };
 
-class Polyline : public Shape, public Printable {
+class Polyline : public Shape {
 public:
-    Polyline(std::string name) : Named(name), Shape(name){} 
+    Polyline(std::string name) : Shape(name){} 
 
     void AddPoint(const Point& point) {
         _points.push_back(point);
@@ -137,7 +154,8 @@ public:
     double GetLength(){
         double length = 0;
         for (XList<Point>::iterator it = _points.begin()->GetNext(); it != NULL; ++it) {
-            length += it->GetValue().GetDistanceToPoint(it->GetPrev()->GetValue());
+            Point prev_point = *(it->GetPrev());
+            length += (*it).GetDistanceToPoint(prev_point);
         }
         return length;
     }
@@ -147,12 +165,31 @@ public:
         for (XList<Point>::iterator it = _points.begin(); it != NULL; ++it) {
             // std::cout << it->GetValue() << ' ';
             printf("-");
-            it->GetValue().print();
+            (*it).print();
         }
         printf("-length=%f\n", GetLength());
+    }
+
+    void ToStream(std::ostream & out){
+        out << "name=" << _name << std::endl;
+        for (XList<Point>::iterator it = _points.begin(); it != NULL; ++it) {
+            out << "-";
+            // out << *it;
+            out << "name=" << (*it).GetName() << std::endl
+                << "\tx=" << (*it).GetX() << std::endl
+                << "\ty=" << (*it).GetY() << std::endl;
+        }
+        out << "-lenght=" << GetLength() << std::endl;
+        // printf("-length=%f\n", GetLength());
     }
 private:
     XList<Point> _points;
 };
+
+template <typename T>
+std::ostream& operator<< (std::ostream& _stream, T& _shape) {
+    _shape.ToStream(_stream);
+    return _stream;
+}
 
 #endif /* CLASSES_H */

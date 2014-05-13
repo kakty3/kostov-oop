@@ -17,12 +17,12 @@ int main(){
 
 	std::cout << "From beginning to ending: ";
 	for (XList<int>::iterator it = xlist.begin(); it != NULL; ++it) {
-		std::cout << it->GetValue() << ' ';
+		std::cout << *it << ' ';
 	}
 	std::cout << std::endl;
 	std::cout << "From ending to beginning: ";
 	for (XList<int>::iterator it = xlist.end(); it != NULL; --it) {
-		std::cout << it->GetValue() << ' ';
+        std::cout << *it << ' ';
 	}
 	std::cout << std::endl;
 	std::cout << "Size is: " << xlist.GetSize() << std::endl;

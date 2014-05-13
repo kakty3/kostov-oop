@@ -14,19 +14,20 @@ int main(){
     Point point3(4., 0., "point_3");
     Point point4(0., 0., "point_4");
     point1.print();
-    printf("Number of shapes = %d\n", Shape::GetCount());
+
+    // std::cout << point1;
 
     Circle circle(point4, 10., "circle_1");
     circle.print();
-    printf("Number of shapes = %d\n", Shape::GetCount());
+    // std::cout << circle;
 
     Rect rect(point1, point2, point3, point4, "rectangle");
     rect.print();
-    printf("Number of shapes = %d\n", Shape::GetCount());
+    // std::cout << rect;
 
     Square square(point4, 4, "square");
     square.print();
-    printf("Number of shapes = %d\n", Shape::GetCount());
+    // std::cout << square;
 
     Polyline polyline("polyline");
     printf("Number of shapes = %d\n", Shape::GetCount());
@@ -38,6 +39,8 @@ int main(){
     polyline.print();
 
     printf("Number of shapes = %d\n", Shape::GetCount());
+    // std::cout << polyline;
+    // printf("Number of shapes = %d\n", Shape::GetCount());
 
     return 0;
 }
