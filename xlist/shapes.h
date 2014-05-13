@@ -31,9 +31,10 @@ public:
     Shape(std::string name) : Printable (name) {
         n_of_shapes++;
     };
-    virtual ~Shape() {
+    ~Shape() {
         n_of_shapes--;
     }
+    virtual void print() {}
     static int GetCount() { return n_of_shapes; }
     static int n_of_shapes;
 private:
@@ -154,19 +155,18 @@ public:
     double GetLength(){
         double length = 0;
         for (XList<Point>::iterator it = _points.begin()->GetNext(); it != NULL; ++it) {
-            Point prev_point = *(it->GetPrev());
-            length += (*it).GetDistanceToPoint(prev_point);
+            // *(it->GetPrev());
+            length += (*it).GetDistanceToPoint(*(it->GetPrev()));
         }
         return length;
     }
 
     virtual void print() {
         printf("name=%s\n", _name.c_str());
-        for (XList<Point>::iterator it = _points.begin(); it != NULL; ++it) {
-            // std::cout << it->GetValue() << ' ';
-            printf("-");
-            (*it).print();
-        }
+        // for (XList<Point>::iterator it = _points.begin(); it != NULL; ++it) {
+        //     printf("-");
+        //     (*it).print();
+        // }
         printf("-length=%f\n", GetLength());
     }
 

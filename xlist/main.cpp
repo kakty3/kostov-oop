@@ -1,49 +1,47 @@
 #include "xlist.h"
+#include "shapes.h"
+
+int Shape::n_of_shapes = 0;
 
 int main(){
-	XList<int> xlist;
-	std::cout << "Is empty: " << xlist.IsEmpty() << std::endl;
-	try {
-		std::cout << xlist.GetFirstValue();
-	} catch (const char* error){
-		std::cout << "EXCEPTION RAISED: "  << error << std::endl;
-	}
+    XList<Shape> shapes;
+    Point point1(0., 2., "point_1");
+    shapes.push_back(point1);
+    Point point2(4., 2., "point_2");
+    Point point3(4., 0., "point_3");
+    Point point4(0., 0., "point_4");
+    printf("Number of shapes = %d\n", Shape::GetCount());
 
-	xlist.push_back(4);
-	xlist.push_back(5);
-	xlist.push_front(3);
-	xlist.push_front(2);
-	xlist.push_front(1);
+    Circle circle(point4, 10., "circle_1");
+    shapes.push_back(circle);
+    circle.print();
+    // std::cout << circle;
+    printf("Number of shapes = %d\n", Shape::GetCount());
 
-	std::cout << "From beginning to ending: ";
-	for (XList<int>::iterator it = xlist.begin(); it != NULL; ++it) {
-		std::cout << *it << ' ';
-	}
-	std::cout << std::endl;
-	std::cout << "From ending to beginning: ";
-	for (XList<int>::iterator it = xlist.end(); it != NULL; --it) {
-        std::cout << *it << ' ';
-	}
-	std::cout << std::endl;
-	std::cout << "Size is: " << xlist.GetSize() << std::endl;
-	std::cout << "Is empty: " << xlist.IsEmpty() << std::endl;
-	std::cout << "First element is: " << xlist.GetFirstValue() << std::endl;
-	std::cout << "Last element is: " << xlist.GetLastValue() << std::endl;
-	std::cout << "Removing last element..." << std::endl;;
-	xlist.RemoveLast();
-	xlist.Print();
-	std::cout << "\nRemoving first element..." << std::endl;;
-	xlist.RemoveFirst();
-	xlist.Print();
-	std::cout << std::endl;
-	std::cout << "Cleaning list..." << std::endl;;
-	xlist.Clean();
-	xlist.Print();
+    Rect rect(point1, point2, point3, point4, "rectangle");
+    shapes.push_back(rect);
+    rect.print();
+    // std::cout << rect;
+    printf("Number of shapes = %d\n", Shape::GetCount());
 
-	XList<std::string> xlist_of_strings;
-	xlist_of_strings.push_back("one");
-	xlist_of_strings.push_back("two");
-	xlist_of_strings.push_back("three");
-	xlist_of_strings.Print();
-	return 0;
+    Square square(point4, 4, "square");
+    shapes.push_back(square);
+    square.print();
+    // std::cout << square;
+    printf("Number of shapes = %d\n", Shape::GetCount());
+
+    Polyline polyline("polyline");
+    printf("Number of shapes = %d\n", Shape::GetCount());
+    polyline.AddPoint(point1);
+    polyline.AddPoint(point2);
+    polyline.AddPoint(point3);
+    polyline.AddPoint(point4);
+    printf("Number of shapes = %d\n", Shape::GetCount());
+    shapes.push_back(polyline);
+    printf("Number of shapes = %d\n", Shape::GetCount());
+    polyline.print();
+
+    printf("Number of shapes = %d\n", Shape::GetCount());
+    return 0;
 }
+

@@ -4,15 +4,15 @@
 #include <stddef.h> // clang doesn't know what is NULL
 #include <iostream>
 
-template <typename T>
+template <class T>
 class XList {
 private:
 	// template <typename _T>
 	struct XListElement {
 	public:
-		XListElement(T data) : _data(data), _next(NULL), _prev(NULL) {}
+		XListElement(const T& data) : _data(data), _next(NULL), _prev(NULL) {}
 		~XListElement(){};
-		T GetData() const { return _data; }
+		const T& GetData() const { return _data; }
 		XListElement * GetNext() const { return _next; }
 		void SetNext(XListElement * ref) { _next = ref; }
 		XListElement * GetPrev() const { return _prev; }

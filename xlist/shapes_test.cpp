@@ -4,7 +4,7 @@
 // Square – квадрат со сторонами, параллельными OX и OY, – как частный случай прямоугольника,
 // Polyline – ломаная; должна быть реализована с помощью списка точек: XList< Point >, наполняться с помощью метода AddPoint( Point const & _point ).
 
-#include "classes.h"
+#include "shapes.h"
 
 int Shape::n_of_shapes = 0;
 
