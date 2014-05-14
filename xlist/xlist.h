@@ -72,7 +72,9 @@ T XList<T>::GetFirstValue() const {
 
 template<typename T>
 T XList<T>::GetLastValue() const {
-	if (_tail == NULL) throw "List is empty";
+	if (_tail == NULL) {
+        throw "List is empty";
+    }
 	return _tail->GetData();
 }
 
@@ -131,5 +133,6 @@ void XList<T>::Print(){
 		std::cout << it->GetData() << ' ';
 	}
 }
+
 
 #endif /* XLIST_H */

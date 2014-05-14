@@ -138,12 +138,17 @@ private:
 
 class Square : public Rect {
 public:
-    Square(Point * bottom_left, double side_size, std::string name) :
-        Rect(new Point(bottom_left->GetX(), bottom_left->GetY() + side_size, ""),
-             new Point(bottom_left->GetX() + side_size, bottom_left->GetY() + side_size, ""),
-             new Point(bottom_left->GetX() + side_size, bottom_left->GetY(), ""),
-             bottom_left,
-             name) {}    
+    Square(Point * top_left, Point * top_right, Point * bottom_right, Point * bottom_left, std::string name) :
+    Rect(top_left, top_right, bottom_right, bottom_left, name) {
+        double top_side = top_left->GetDistanceToPoint(top_right);
+        double bottom_side = bottom_left->GetDistanceToPoint(bottom_right);
+        double left_side = bottom_left->GetDistanceToPoint(top_left);
+        double right_side = bottom_right->GetDistanceToPoint(top_right);
+        if (top_side != bottom_side || top_side != left_side || top_side != right_side) {
+            throw "Square has invalid sides";
+            // std::cout << "pidr";
+        }
+    }    
 };
 
 class Polyline : public Shape {
@@ -187,16 +192,17 @@ private:
     XList<Point*> _points;
 };
 
-template <typename T>
-std::ostream& operator<< (std::ostream& _stream, T& _shape) {
-    _shape.ToStream(_stream);
-    return _stream;
-}
+// template <typename T>
+// std::ostream& operator<< (std::ostream& _stream, T& _shape) {
+//     _shape.ToStream(_stream);
+//     return _stream;
+// }
 
 template <typename T>
 std::ostream& operator<< (std::ostream& _stream, T* _shape) {
     _shape->ToStream(_stream);
     return _stream;
 }
+
 
 #endif /* CLASSES_H */

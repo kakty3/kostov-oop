@@ -6,7 +6,7 @@ int main(){
 	try {
 		std::cout << xlist.GetFirstValue();
 	} catch (const char* error){
-		std::cout << "EXCEPTION RAISED: "  << error << std::endl;
+		std::cout << error << std::endl;
 	}
 
 	xlist.push_back(4);
