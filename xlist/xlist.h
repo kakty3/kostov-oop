@@ -40,8 +40,8 @@ public:
 	struct iterator {
 	    XListElement * ptr;
 	    iterator (XListElement * _ptr = 0) : ptr(_ptr) {}
-	    T operator*() const { 
-            return (*ptr).GetData(); 
+	    const T& operator*() const { 
+            return ptr->GetData(); 
         }
 	    XListElement * operator->() const { return ptr; }
 	    bool operator!=(XListElement * other) const { return !(ptr == other); }
